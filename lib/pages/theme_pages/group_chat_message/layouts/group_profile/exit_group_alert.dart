@@ -1,0 +1,55 @@
+import '../../../../../config.dart';
+
+class ExitGroupAlert extends StatelessWidget {
+  final String? name;
+
+  const ExitGroupAlert({Key? key, this.name}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<GroupChatMessageController>(builder: (chatCtrl) {
+      return AlertDialog(
+        title: Text("Exit $name group?"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(fonts.existGroup.tr),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(fonts.close.tr),
+          ),
+          TextButton(
+            onPressed: () async {
+              FirebaseFirestore.instance
+                  .collection(collectionName.groups)
+                  .doc(chatCtrl.pId)
+                  .get()
+                  .then((value) async {
+                if (value.exists) {
+                  List userList = value.data()!["users"];
+                  userList.removeWhere(
+                      (element) => element["id"] == appCtrl.user["id"]);
+
+                  await FirebaseFirestore.instance
+                      .collection(collectionName.groups)
+                      .doc(chatCtrl.pId)
+                      .update({"users": userList}).then((value) {
+                    chatCtrl.getPeerStatus();
+                  });
+                }
+              });
+              Get.back();
+            },
+            child: Text(fonts.existGroup.tr),
+          ),
+        ],
+      );
+    });
+  }
+}

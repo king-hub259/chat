@@ -1,0 +1,192 @@
+
+import 'package:dio/dio.dart';
+import 'package:flutter_theme/config.dart';
+import 'package:flutter_theme/models/message_model.dart';
+import 'package:open_filex/open_filex.dart';
+
+class BroadcastOnTapFunctionCall {
+  var openResult = 'Unknown';
+  //contentTap
+  contentTap(BroadcastChatController chatCtrl, docId) {
+
+    if (chatCtrl.selectedIndexId.isNotEmpty) {
+      chatCtrl.enableReactionPopup = false;
+      chatCtrl.showPopUp = false;
+      if (!chatCtrl.selectedIndexId.contains(docId)) {
+        chatCtrl.selectedIndexId.add(docId);
+      } else {
+        chatCtrl.selectedIndexId.remove(docId);
+      }
+      chatCtrl.update();
+    }
+  }
+
+  //image tap
+  imageTap(BroadcastChatController chatCtrl, docId,MessageModel? document) async {
+    if (chatCtrl.selectedIndexId.isNotEmpty) {
+      if (chatCtrl.selectedIndexId.isNotEmpty) {
+        chatCtrl.enableReactionPopup = false;
+        chatCtrl.showPopUp = false;
+      }
+      if (!chatCtrl.selectedIndexId.contains(docId)) {
+        chatCtrl.selectedIndexId.add(docId);
+      } else {
+        chatCtrl.selectedIndexId.remove(docId);
+      }
+      chatCtrl.update();
+    } else {
+
+      var dio = Dio();
+      var tempDir = await getExternalStorageDirectory();
+      var filePath = tempDir!.path +
+          (decryptMessage(document!.content).contains("-BREAK-")
+              ? decryptMessage(document.content).split("-BREAK-")[0]
+              : (decryptMessage(document.content)));
+      await dio.download(
+          decryptMessage(document.content).contains("-BREAK-")
+              ? decryptMessage(document.content).split("-BREAK-")[1]
+              : decryptMessage(document.content),
+          filePath);
+      final result = await OpenFilex.open(filePath);
+
+
+      openResult = "type=${result.type}  message=${result.message}";
+
+    }
+  }
+
+  //location tap
+  locationTap(BroadcastChatController chatCtrl, docId,MessageModel? document) {
+    if (chatCtrl.selectedIndexId.isNotEmpty) {
+      if (chatCtrl.selectedIndexId.isNotEmpty) {
+        chatCtrl.enableReactionPopup = false;
+        chatCtrl.showPopUp = false;
+      }
+      if (!chatCtrl.selectedIndexId.contains(docId)) {
+        chatCtrl.selectedIndexId.add(docId);
+      } else {
+        chatCtrl.selectedIndexId.remove(docId);
+      }
+      chatCtrl.update();
+    } else {
+      launchUrl(Uri.parse(document!.content!));
+    }
+  }
+
+  //pdf tap
+  pdfTap(BroadcastChatController chatCtrl, docId,MessageModel? document) async {
+    if (chatCtrl.selectedIndexId.isNotEmpty) {
+      if (chatCtrl.selectedIndexId.isNotEmpty) {
+        chatCtrl.enableReactionPopup = false;
+        chatCtrl.showPopUp = false;
+      }
+      if (!chatCtrl.selectedIndexId.contains(docId)) {
+        chatCtrl.selectedIndexId.add(docId);
+      } else {
+        chatCtrl.selectedIndexId.remove(docId);
+      }
+      chatCtrl.update();
+    } else {
+
+      var dio = Dio();
+      var tempDir = await getExternalStorageDirectory();
+
+      var filePath = tempDir!.path + decryptMessage(document!.content).split("-BREAK-")[0];
+     await dio.download(
+          decryptMessage(document.content).split("-BREAK-")[1], filePath);
+
+      final result = await OpenFilex.open(filePath);
+
+      openResult = "type=${result.type}  message=${result.message}";
+      OpenFilex.open(filePath);
+    }
+  }
+
+  //doc tap
+  docTap(BroadcastChatController chatCtrl, docId,MessageModel? document) async {
+    if (chatCtrl.selectedIndexId.isNotEmpty) {
+      if (chatCtrl.selectedIndexId.isNotEmpty) {
+        chatCtrl.enableReactionPopup = false;
+        chatCtrl.showPopUp = false;
+      }
+      if (!chatCtrl.selectedIndexId.contains(docId)) {
+        chatCtrl.selectedIndexId.add(docId);
+      } else {
+        chatCtrl.selectedIndexId.remove(docId);
+      }
+      chatCtrl.update();
+    } else {
+      var dio = Dio();
+      var tempDir = await getExternalStorageDirectory();
+
+      var filePath = tempDir!.path + decryptMessage(document!.content).split("-BREAK-")[0];
+      await dio.download(
+          decryptMessage(document.content).split("-BREAK-")[1], filePath);
+
+      final result = await OpenFilex.open(filePath);
+
+      openResult = "type=${result.type}  message=${result.message}";
+      OpenFilex.open(filePath);
+    }
+  }
+
+  //excel tap
+  excelTap(BroadcastChatController chatCtrl, docId,MessageModel? document) async {
+    if (chatCtrl.selectedIndexId.isNotEmpty) {
+      if (chatCtrl.selectedIndexId.isNotEmpty) {
+        chatCtrl.enableReactionPopup = false;
+        chatCtrl.showPopUp = false;
+      }
+      if (!chatCtrl.selectedIndexId.contains(docId)) {
+        chatCtrl.selectedIndexId.add(docId);
+      } else {
+        chatCtrl.selectedIndexId.remove(docId);
+      }
+      chatCtrl.update();
+    } else {
+
+      var dio = Dio();
+      var tempDir = await getExternalStorageDirectory();
+
+      var filePath = tempDir!.path + decryptMessage(document!.content).split("-BREAK-")[0];
+       await dio.download(
+          decryptMessage(document.content).split("-BREAK-")[1], filePath);
+
+      final result = await OpenFilex.open(filePath);
+
+      openResult = "type=${result.type}  message=${result.message}";
+
+      OpenFilex.open(filePath);
+    }
+  }
+
+  //doc image tap
+  docImageTap(BroadcastChatController chatCtrl, docId,MessageModel? document) async {
+    if (chatCtrl.selectedIndexId.isNotEmpty) {
+      if (chatCtrl.selectedIndexId.isNotEmpty) {
+        chatCtrl.enableReactionPopup = false;
+        chatCtrl.showPopUp = false;
+      }
+      if (!chatCtrl.selectedIndexId.contains(docId)) {
+        chatCtrl.selectedIndexId.add(docId);
+      } else {
+        chatCtrl.selectedIndexId.remove(docId);
+      }
+      chatCtrl.update();
+    } else {
+
+      var dio = Dio();
+      var tempDir = await getExternalStorageDirectory();
+
+      var filePath = tempDir!.path + decryptMessage(document!.content).split("-BREAK-")[0];
+       await dio.download(
+          decryptMessage(document.content).split("-BREAK-")[1], filePath);
+
+      final result = await OpenFilex.open(filePath);
+
+      openResult = "type=${result.type}  message=${result.message}";
+      OpenFilex.open(filePath);
+    }
+  }
+
+}
